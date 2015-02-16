@@ -1,0 +1,185 @@
+/*------------------------------------------------
+Antergos Webkit2 Greeter theme stylesheet
+
+Authors: Aidan Collier and Dustin Falgout
+URL: http://antergos.com/
+License: GPL
+-------------------------------------------------*/
+
+
+@font-face{
+font-family: Lato;
+    src: url('../font-awesome/fonts/Lato-Regular.ttf');
+}
+
+@font-face{
+font-family: LatoLight;
+    src: url('../font-awesome/fonts/Lato-Light.ttf');
+}
+
+body {
+    height: 100%;
+    width: 100%;
+    -webkit-background-size: cover;
+    background-image: url('/usr/share/antergos/wallpapers/falgout_blur.png');
+    font-family: "Lato", "Open Sans", sans-serif;
+}
+
+#branding {
+    display: inline-block;
+    margin-top: 3pt;
+    margin-left: 15pt;
+}
+
+#hostname {
+    display: inline-block;
+    float: right;
+    margin-right: 15pt;
+    vertical-align: middle;
+    color: gray;
+}
+
+#headDivider {
+    margin-top: 3pt;
+}
+
+.modBtn {
+    height: 36pt;
+    width: 36pt;
+    background-color: #0066FF;
+    border: 2px solid #fff;
+    border-radius: 100%;
+    text-align: center;
+}
+
+.modBtn:hover {
+    background-color: #00378A;
+}
+
+#actionsCover {
+    position: absolute;
+    margin-top: 0pt;
+    height: 70pt;
+    width: 100%;
+    top: 0;
+    left: 0;
+}
+
+#actionsBtn {
+    margin-top: 15pt;
+    margin-bottom: auto;
+    margin-left: auto;
+    margin-right: 25pt;
+}
+
+#actionsPanel {
+    display: none;
+    positition: absolute;
+    top: 0;
+    left: 0;
+    margin-top: 0pt;
+    background-color: #34383E;
+    width: 100%;
+    height: 70pt;
+    border-bottom: 2px solid #2D2D2D;
+}
+
+#wallSwitch {
+    display: inline-block;
+    margin-top: 15pt;
+    margin-left: 25pt;
+}
+
+
+#thumbsView{
+    display: none;
+    width: 50pt;
+    height: inherit;
+}
+
+#thumbs a {
+    display: inline-block;
+}
+
+#thumbs a img:hover {
+    border: 2px solid #fff;
+}
+
+#randomDiv {
+    display: inline-block;
+    height: 67px;
+    width: 102px;
+    background-color: #000;
+    text-align: center;
+    color: #fff;
+    font-size: 10pt;
+}
+
+
+.menuClose {
+    background-color: #FF3333;
+}
+
+.menuClose:hover {
+    background-color: #CC0000;
+}
+
+#actionsRight {
+    display: inline-block;
+    float: right;
+    margin-top: 15pt;
+    margin-right: 25pt;
+}
+
+#actionsListRight {
+    list-style-type: none;
+}
+
+#actionsListRight li {
+    display: inline-block;
+    margin-left: 8pt;
+}
+
+.btnIco {
+    position: relative;
+    color: #fff;
+    font-size: 24pt;
+    margin-top: 5pt;
+    margin-bottom: 5pt;
+}
+
+#wallPane {
+    positon: absolute;
+    top: 0;
+    left: 0;
+    margin-left: -120px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-right: auto;
+    display: none;
+    background-color: #34383E;
+    height: auto;
+    width: 120px;
+}
+
+#loginPane {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin-top: 150pt;
+    height: 300pt;
+    width: 100%;
+    border-top: 3px solid #0066FF;
+    border-bottom: 3px solid #0066FF;
+    background-color: #fff;
+
+}
+
+#current_time {
+
+}
+
+#bottomSlide {
+    display: none;
+}
