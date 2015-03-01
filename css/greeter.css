@@ -17,12 +17,47 @@ font-family: LatoLight;
     src: url('../font-awesome/fonts/Lato-Light.ttf');
 }
 
+#thumbsView::-webkit-scrollbar-track {
+    margin-left: 0;
+    border-left: 2px solid #294AAD;
+	background-color: #34383E;
+}
+
+#thumbsView::-webkit-scrollbar {
+    width: 10px;
+	background-color: #34383E;
+}
+
+#thumbsView::-webkit-scrollbar-thumb {
+    
+	background-color: #294AAD;
+}
+
+#thumbsView::-webkit-scrollbar-thumb:hover {
+    
+	background-color: #4168E8;
+}
+
 body {
+    z-index: -1;
+}
+
+#bgDiv {
+    position: absolute;
+    display: block;
     height: 100%;
     width: 100%; 
     background-image: url('/usr/share/antergos/wallpapers/antergos-wallpaper.png');
-    -blink-background-size: cover;
-    font-family: "Lato", "Open Sans", sans-serif;
+    -webkit-background-size: cover;
+    background-repeat: no-repeat;
+    z-index: -1;
+}
+
+#viewport {
+    height: 100%;
+    width: 100%; 
+    font-family: "LatoLight", "Open Sans", sans-serif;
+    z-index: 2;
 }
 
 #branding {
@@ -46,14 +81,14 @@ body {
 .modBtn {
     height: 36pt;
     width: 36pt;
-    background-color: #0066FF;
+    background-color: #294AAD;
     border: 2px solid #fff;
     border-radius: 100%;
     text-align: center;
 }
 
 .modBtn:hover {
-    background-color: #00378A;
+    background-color: #4168E8;
 }
 
 #actionsCover {
@@ -69,7 +104,7 @@ body {
     margin-top: 15pt;
     margin-bottom: auto;
     margin-left: auto;
-    margin-right: 25pt;
+    margin-right: 15pt;
 }
 
 #actionsPanel {
@@ -78,16 +113,14 @@ body {
     top: 0;
     left: 0;
     margin-top: 0pt;
-    background-color: #34383E;
     width: 100%;
     height: 70pt;
-    border-bottom: 2px solid #2D2D2D;
 }
 
 #wallSwitch {
     display: inline-block;
     margin-top: 15pt;
-    margin-left: 25pt;
+    margin-left: 15pt;
 }
 
 
@@ -95,6 +128,20 @@ body {
     display: block;
     margin-top: 0px;
     margin-bottom: 0px;
+    cursor: pointer;
+}
+
+.activeThumb {
+    border-right: 4px solid #50C44C;
+}
+
+#thumbsView {
+    margin-top: 100%;
+    margin-bottom: 100%;
+    display: block;
+    position: inherit;
+    height: 600pt;
+    overflow-y: scroll;
 }
 
 #randomDiv {
@@ -107,23 +154,19 @@ body {
     font-size: 10pt;
 }
 
-.activeThumb {
-    border: 2px solid #fff;
-}
-
 .menuClose {
-    background-color: #FF3333;
+    background-color: #D40000;
 }
 
 .menuClose:hover {
-    background-color: #CC0000;
+    background-color: #F00000;
 }
 
 #actionsRight {
     display: inline-block;
     float: right;
     margin-top: 15pt;
-    margin-right: 25pt;
+    margin-right: 15pt;
 }
 
 
@@ -156,19 +199,19 @@ body {
     margin-bottom: 0px;
     margin-right: auto;
     background-color: #34383E;
-    border-right: 2px solid #2D2D2D;
+    border-right: 5px solid #2D2D2D;
     height: 100%;
-    width: 130px;
-    z-index: 2;
+    width: 122px;
+    z-index: 3;
 }
 
 #wallClose {
-    position: relative;
     top: 0;
     left: 0;
     margin-top: 15pt;
-    margin-left: 25pt;
-    margin-bottom: 15pt;
+    margin-left: 15pt;
+    margin-bottom: 10pt;
+    z-index: 3;
 }
 
 #loginPane {
@@ -178,14 +221,15 @@ body {
     left: 0;
     height: 300pt;
     width: 100%;
-    border-top: 3px solid #0066FF;
-    border-bottom: 3px solid #0066FF;
+    border-top: 3px solid #294AAD;
+    border-bottom: 3px solid #294AAD;
     background-color: #fff;
     margin-top: 220pt;
 }
 
-#current_time {
-    color: #000;
+#currentTime {
+    font-size: 60pt;
+    color: #0066FF;
 }
 
 #bottomSlide {

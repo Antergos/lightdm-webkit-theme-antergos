@@ -9,26 +9,23 @@
 
 	<title>The Antergos Greeter Theme</title>
     
-    <!--For testing changes made to theme in any web browser-->
-    <script type="text/javascript" src="js/mock.js"></script>
-    
-     <!-- Bootstrap Core CSS -->
-    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.min.css">
-    
     <!-- Custom CSS here -->
-    <link rel="stylesheet" type="text/css" href="css/bootstrap/theme.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="css/greeter.css">
     
     <!-- The order in which each script appears in document is VERY IMPORTANT -->
-    <script src="js/jquery-1.11.2.min.js"></script>
-    <script src="js/jquery-ui-1.11.3/jquery-ui.min.js"></script>
-    <script src="js/bootstrap.js"></script>
-    <script src="js/greeter.js"></script>
+    <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui-1.11.3/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+    <script type="text/javascript" src="js/mock.js"></script>
+    <script type="text/javascript" src="js/greeter.js"></script>
     
     </head>
 
     <body>
+        
+        <div id="bgDiv"></div>
     
         <div id="viewport">
             <div id="actionsCover">
@@ -39,7 +36,7 @@
 
             <div id="actionsPanel">    
                     <div id="wallSwitch" class="modBtn" title="Change Wallpaper">
-                        <i class="fa fa-picture-o btnIco"></i>
+                        <i class="fa fa-eye btnIco"></i>
                     </div>
                     <div id="actionsRight">
                         <ul id="actionsListRight">
@@ -73,13 +70,16 @@
                 </div>
 
                 <div id="thumbs">
-                    <a id="randomWall" href='#' data-img="random" class="bgOpt">
-                        <div id="randomDiv">
-                            <p>Random</p>
-                        </div>
-                    </a>
+                    
                     
                     <div id="thumbsView">
+                        
+                        <a id="randomWall" href='#' data-img="random" class="bgOpt">
+                            <div id="randomDiv">
+                                <p>Random</p>
+                            </div>
+                        </a>
+                        
                         <a href="#" data-img="antergos-wallpaper.png" class="bgOpt">
                             <img src="img/thumbs/antergos-wallpaper.png" />
                         </a>
@@ -141,30 +141,28 @@
                 </div>
             </div>
             
-        <div id="loginPane">
-            <div id="loginHeader">
-                <span id="branding">
-                    <img src="img/logoflat.png" height="55pt" width="55pt">
-                </span>
-                
-                <span id="hostname"></span>
-            </div>
-            
-            <hr id="headDivider">
-            
-            <div id="loginContent">
-                <div id="topSlide">
-                    <div id="timewrap" class="time-panel">
-                    <!-- Clock Widget -->
-                    <span id="current_time" class="time text-center"></span>
-                    </div>
+            <div id="loginPane">
+                <div id="loginHeader">
+                    <span id="branding">
+                        <img src="img/logoflat.png" height="55pt" width="55pt">
+                    </span>
+                    <span id="hostname"></span>
                 </div>
-                <div id="bottomSlide"></div>
+
+                <hr id="headDivider">
+
+                <div id="loginContent">
+                    <div id="topSlide">
+                        <div id="timewrap" class="time-panel">
+                        <!-- Clock Widget -->
+                        <span id="currentTime" class=""></span>
+                        </div>
+                    </div>
+                    <div id="bottomSlide"></div>
+                </div>
             </div>
-        </div>
             
         </div>
-    
     </body>
     
 </html>
