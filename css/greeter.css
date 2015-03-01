@@ -19,9 +19,9 @@ font-family: LatoLight;
 
 body {
     height: 100%;
-    width: 100%;
-    -webkit-background-size: cover;
+    width: 100%; 
     background-image: url('/usr/share/antergos/wallpapers/antergos-wallpaper.png');
+    -blink-background-size: cover;
     font-family: "Lato", "Open Sans", sans-serif;
 }
 
@@ -58,11 +58,11 @@ body {
 
 #actionsCover {
     position: absolute;
+    top: 0;
+    left: 0;
     margin-top: 0pt;
     height: 70pt;
     width: 100%;
-    top: 0;
-    left: 0;
 }
 
 #actionsBtn {
@@ -91,18 +91,10 @@ body {
 }
 
 
-#thumbsView{
-    display: none;
-    width: 50pt;
-    height: inherit;
-}
-
 #thumbs a {
-    display: inline-block;
-}
-
-#thumbs a img:hover {
-    border: 2px solid #fff;
+    display: block;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
 #randomDiv {
@@ -115,6 +107,9 @@ body {
     font-size: 10pt;
 }
 
+.activeThumb {
+    border: 2px solid #fff;
+}
 
 .menuClose {
     background-color: #FF3333;
@@ -131,7 +126,10 @@ body {
     margin-right: 25pt;
 }
 
+
+
 #actionsListRight {
+    display: block;
     list-style-type: none;
 }
 
@@ -149,17 +147,28 @@ body {
 }
 
 #wallPane {
-    positon: absolute;
+    display: none;
+    position: absolute;
     top: 0;
     left: 0;
-    margin-left: -120px;
+    margin-left: 0px;
     margin-top: 0px;
     margin-bottom: 0px;
     margin-right: auto;
-    display: none;
     background-color: #34383E;
-    height: auto;
-    width: 120px;
+    border-right: 2px solid #2D2D2D;
+    height: 100%;
+    width: 130px;
+    z-index: 2;
+}
+
+#wallClose {
+    position: relative;
+    top: 0;
+    left: 0;
+    margin-top: 15pt;
+    margin-left: 25pt;
+    margin-bottom: 15pt;
 }
 
 #loginPane {
@@ -167,17 +176,16 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    margin-top: 150pt;
     height: 300pt;
     width: 100%;
     border-top: 3px solid #0066FF;
     border-bottom: 3px solid #0066FF;
     background-color: #fff;
-
+    margin-top: 220pt;
 }
 
 #current_time {
-
+    color: #000;
 }
 
 #bottomSlide {

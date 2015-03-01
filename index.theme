@@ -1,7 +1,7 @@
 [theme]
 name=Aidan
 version=3.0.0
-description=A refreshed theme for the Antergos login
+description=Welcome to Antergos!
 engine=lightdm-webkit2-greeter
 url=index.html
 session=cinnamon

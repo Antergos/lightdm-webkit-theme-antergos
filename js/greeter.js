@@ -51,8 +51,6 @@ function get_hostname() {
     $('#hostname').append("<h3>" + hostname + "</h3>");
 }
 
-
-
 //  UI Init
 
 $(document).ready(function() {
@@ -67,14 +65,17 @@ $(document).ready(function() {
     
     //script for the menuclose button
     $('#menuClose').click(function() {
-    $('#actionsPanel').slideUp(function() {
-            $('#actionsCover').slideDown();
+        $('#actionsPanel').slideUp(function() {
+            $('#actionsCover').fadeIn();
         });
     });
     
     //Script for wallClose button
     $('#wallClose').click(function() {
-        $('#wallPane').animate({left: "+=100"}, 5000);
+        $('#wallPane').toggle("slide", function(){
+            $('#loginPane').css({opacity: 1});
+            $('#actionsCover').fadeIn();
+        });
     });
     
     //Script for Wallpaper Changer
@@ -89,13 +90,15 @@ $(document).ready(function() {
         }
     });
     
+    //Script for Action Menu
     $('#actionsBtn').mouseenter(function() {
-        $('#actionsCover').slideUp(function() {
+        $('#actionsCover').fadeOut(function() {
             $('#actionsPanel').slideDown();
             //script for the wallpaper changer
             $('#wallSwitch').click(function() {
-                $('#actionsPanel').slideUp(function() {
-                    $('#wallPanel').fadeIn();
+                $('#actionsPanel').slideUp("fast", function() {
+                    $('#loginPane').css({opacity: 0.5});
+                    $('#wallPane').toggle("slide");
                 });
             });         
         });
