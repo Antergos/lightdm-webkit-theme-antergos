@@ -60,8 +60,8 @@ $(document).ready(function() {
     
     //Function for the random background option
     function randomBG() {
-            localStorage.setItem("bgsaved", '');
-            $(".bgOpt .bg .random").first().addClass('active');
+            localStorage.setItem('bgsaved', 'random');
+            $(".bgOpt").first().addClass('activeThumb');
             var arrayBackground = [];
             $('.bgOpt').each(function(i) {
                 if (i > 0) {
@@ -95,28 +95,29 @@ $(document).ready(function() {
     //Script for wallClose button
     $('#wallClose').click(function() {
         console.log("Closed!");
-        $('#wallPane').slideUp();
-        $('#loginPane').css("opacity", "1");
-        $('#actionsCover').fadeIn();
+        $('#wallPane').slideUp(function() {
+            $('#loginPane').fadeTo('fast', 1, function() {$("#loginPane").css("opacity", "1");});
+            $('#actionsCover').fadeIn();
+        });
     });
 
     //Script for Wallpaper Changer
     $('.bgOpt').click(function() {
         var newBg = $(this).attr("data-img");
         if (newBg == 'random') {
-            alert("DEBUG");
+            $(bgSaved).toggleClass("activeThumb");
+            bgSaved = this;
+            randomBG(bgSaved);
         }
 
         else {
              $(bgSaved).toggleClass("activeThumb");
              $(this).toggleClass("activeThumb");
              $('#bgDiv').fadeTo('slow', .4, function() {
-                        $("#bgDiv").css("background", "url('/usr/share/antergos/wallpapers/" + newBg + "')");
+                    $("#bgDiv").css("background", "url('/usr/share/antergos/wallpapers/" + newBg + "')");
              }).fadeTo('slow', 1);
             bgSaved = this;
-            
-            
-            
+            localStorage.setItem("bgsaved", this);
         }
     });
     

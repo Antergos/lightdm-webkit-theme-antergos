@@ -132,7 +132,7 @@ body {
 }
 
 .activeThumb {
-    border-right: 4px solid #50C44C;
+    border-right: 4px #50C44C solid;
 }
 
 #thumbsView {
@@ -148,7 +148,7 @@ body {
     display: inline-block;
     height: 67px;
     width: 102px;
-    background-color: #000;
+    background-color: #111;
     text-align: center;
     color: #fff;
     font-size: 10pt;
