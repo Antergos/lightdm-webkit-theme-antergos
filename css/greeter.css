@@ -1,0 +1,255 @@
+/*------------------------------------------------
+Antergos Webkit2 Greeter theme stylesheet
+
+Authors: Aidan Collier and Dustin Falgout
+URL: http://antergos.com/
+License: GPL
+-------------------------------------------------*/
+
+/* Declararions of the Lato font */
+@font-face{
+font-family: Lato;
+    src: url('../font-awesome/fonts/Lato-Regular.ttf');
+}
+
+@font-face{
+font-family: LatoLight;
+    src: url('../font-awesome/fonts/Lato-Light.ttf');
+}
+
+body {
+    z-index: -1;
+}
+
+/* Setup for the div which contains the wallpaper */
+#bgDiv {
+    position: absolute;
+    display: block;
+    height: 100%;
+    width: 100%; 
+    background-image: url('/usr/share/antergos/wallpapers/antergos-wallpaper.png');
+    -webkit-background-size: cover;
+    background-repeat: no-repeat;
+    z-index: -1;
+}
+
+/* Setup for the UI layer over top of the background */
+#viewport {
+    height: 100%;
+    width: 100%; 
+    font-family: "LatoLight", "Open Sans", sans-serif;
+    z-index: 2;
+}
+
+/* Style for the <hr> seperating the logo and hostname from the working area */
+#headDivider {
+    margin-top: 3pt;
+}
+
+/* Style for the circle buttons */
+
+.modBtn {
+    height: 36pt;
+    width: 36pt;
+    background-color: #294AAD;
+    border: 2px solid #fff;
+    border-radius: 100%;
+    text-align: center;
+}
+
+.modBtn:hover {
+    background-color: #4168E8;
+}
+
+/* CSS for centering the font within an icon */
+.btnIco {
+    position: relative;
+    color: #fff;
+    font-size: 24pt;
+    margin-top: 5pt;
+    margin-bottom: 5pt;
+}
+
+/* A div intended to replace the #actionsPanel when it is not toggled */
+#actionsCover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin-top: 0pt;
+    height: 70pt;
+    width: 100%;
+}
+
+/* Style for the design of the button which toggles the #actionsPanel */
+#actionsBtn {
+    margin-top: 15pt;
+    margin-bottom: auto;
+    margin-left: auto;
+    margin-right: 15pt;
+}
+
+/* Style for the div containing the reboot/bibernate/etc. buttons */
+#actionsPanel {
+    display: none;
+    positition: absolute;
+    top: 0;
+    left: 0;
+    margin-top: 0pt;
+    width: 100%;
+    height: 70pt;
+}
+
+/* CSS for the wallpaper menu toggle */
+#wallSwitch {
+    display: inline-block;
+    margin-top: 15pt;
+    margin-left: 15pt;
+}
+
+/* Style for the #wallPane and its close button */
+#wallPane {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin-left: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-right: auto;
+    background-color: #34383E;
+    border-right: 5px solid #2D2D2D;
+    height: 100%;
+    width: 140px;
+    z-index: 3;
+}
+
+#wallClose {
+    top: 0;
+    left: 0;
+    margin-top: 15pt;
+    margin-left: 15pt;
+    margin-bottom: 10pt;
+    z-index: 3;
+}
+
+/* Positioning for the thumbnails in the #wallPane*/
+#thumbs a {
+    display: block;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    cursor: pointer;
+}
+
+/* Symbol for an active selection, a light green dash on the side of the active thumbnail */
+.activeThumb img {
+    border-right: 6px #50C44C solid;
+}
+
+/* Style for the wallpaper selctection list */
+#thumbsView {
+    margin-left: 8pt;
+    margin-top: 5pt;
+    display: block;
+    position: inherit;
+    height: 620pt;
+    overflow-y: scroll;
+}
+
+/* Style for the 'random' option */
+#randomWall {
+}
+
+#randomWall h3 {
+    vertical-align: center;
+    text-align: center;
+}
+
+
+/* Style for the #thumbsView scrollbar */
+#thumbsView::-webkit-scrollbar-track {
+    border-left: 2px solid #294AAD;
+	background-color: #34383E;
+}
+
+#thumbsView::-webkit-scrollbar {
+    width: 10px;
+	background-color: #34383E;
+}
+
+#thumbsView::-webkit-scrollbar-thumb {
+	background-color: #294AAD;
+}
+
+#thumbsView::-webkit-scrollbar-thumb:hover {   
+	background-color: #4168E8;
+}
+
+
+
+/* Style for the close buttons */
+.menuClose {
+    background-color: #D40000;
+}
+
+.menuClose:hover {
+    background-color: #F00000;
+}
+
+/* Positioning for the system action icons in the #actionsPanel */
+#actionsRight {
+    display: inline-block;
+    float: right;
+    margin-top: 15pt;
+    margin-right: 15pt;
+}
+
+#actionsListRight {
+    display: block;
+    list-style-type: none;
+}
+
+#actionsListRight li {
+    display: inline-block;
+    margin-left: 8pt;
+}
+
+/* Style for the login Pane */
+#loginPane {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 300pt;
+    width: 100%;
+    border-top: 3px solid #294AAD;
+    border-bottom: 3px solid #294AAD;
+    background-color: #fff;
+    margin-top: 220pt;
+}
+
+/* Styling for the logo */
+#branding {
+    display: inline-block;
+    margin-top: 3pt;
+    margin-left: 15pt;
+}
+
+/* Style for the hostname, complete with elegant font (or theme) */
+#hostname {
+    display: inline-block;
+    float: right;
+    margin-right: 15pt;
+    vertical-align: middle;
+    color: gray;
+}
+
+/* Style for the clock widget */
+#currentTime {
+    font-size: 60pt;
+    color: #0066FF;
+}
+
+/* Style for initially hidden user list area */
+#bottomSlide {
+    display: none;
+}

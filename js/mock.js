@@ -1,4 +1,3 @@
-// mock lighdm for testing
 if (typeof lightdm == 'undefined') {
 	lightdm= {};
 	lightdm.hostname="test-host";
