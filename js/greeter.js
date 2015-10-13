@@ -29,7 +29,7 @@ var DEBUG = true,
 	selectedUser = null,
 	authPending = null,
 	users_shown = null,
-	userList;
+	user_list;
 
 
 /**
@@ -42,35 +42,43 @@ function log(text) {
 	}
 }
 
-$(document).ready(function () {
+window.greeter = {
 
-	function buildUserList() {
-		// User list building
-		userList = $('#user-list2');
+	init: function () {
+		this.initialize_timer();
+		this.initialize_user_list();
+	},
+
+	initialize_user_list: function () {
+		var _self = this,
+			$user_list = $('.ant-slider'),
+				first = true;
 		for (var i in lightdm.users) {
-			var user = lightdm.users[i];
-			var tux = 'img/screenshot1.jpg';
-			var imageSrc = user.image.length > 0 ? user.image : tux;
-			var lastSession = localStorage.getItem(user.name);
-			if (lastSession == null && lastSession == undefined) {
-				localStorage.setItem(user.name, lightdm.default_session);
-				lastSession = localStorage.getItem(user.name);
-			}
-			log('Last Session (' + user.name + '): ' + lastSession);
-			var li = '<a href="#' + user.name + '" class="list-group-item ' + user.name + '" onclick="startAuthentication(\'' + user.name + '\')" data-session="' + lastSession + '">' +
-				'<img src="' + imageSrc + '" class="img-circle" alt="' + user.display_name + '" onerror="imgNotFound(this)"/> ' +
-				'<span>' + user.display_name + '</span>' +
-				'<span class="badge"><i class="fa fa-check"></i></span>' +
-				'</a>';
-			$(userList).append(li);
-			if ($(userList).children().length > 3) {
-				$(userList).css('column-count', '2');
-				$(userList).parent().css('max-width', '85%');
-			}
-		}
-	}
+			var user = lightdm.users[i],
+				last_session = localStorage.getItem(user.name + ':session'),
+				$user_el = $(_self.partial.user),
+				image_src = (user.image.length > 0) ? user.image : 'img/user-img2.png';
 
-	function buildSessionList() {
+			if (last_session === null || last_session === undefined) {
+				localStorage.setItem(user.name + ':session', lightdm.default_session);
+			}
+			if (true === first) {
+				$user_el.addClass('current');
+				first = false;
+			}
+			log('Last Session (' + user.name + '): ' + last_session);
+			$user_el.attr({
+				'data-username': user.name,
+				'data-session': last_session
+			});
+			$user_el.find('h2').text(user.display_name);
+			$user_el.find('img').attr('src', image_src);
+
+			$($user_list).append($user_el);
+		}
+	},
+
+	buildSessionList: function () {
 		// Build Session List
 		for (var i in lightdm.sessions) {
 			var session = lightdm.sessions[i];
@@ -82,75 +90,49 @@ $(document).ready(function () {
 
 
 		}
-	}
+	},
 
-	function show_users() {
+	show_users: function () {
 		if ($('#collapseOne').hasClass('in')) {
 			$('#trigger').trigger('click');
 			users_shown = true;
 		}
 		if ($('#user-list2 a').length <= 1) $('#user-list2 a').trigger('click');
 
-	}
-
-	/**
-	 * UI Initialization.
-	 */
+	},
 
 
-	initialize_timer();
-	get_hostname();
-
-	buildUserList();
-	buildSessionList();
-	// Password submit when enter key is pressed
-
-	$(document).keydown(function (e) {
-		checkKey(e);
-	});
-	// Action buttons
-	addActionLink("shutdown");
-	addActionLink("hibernate");
-	addActionLink("suspend");
-	addActionLink("restart");
-
-	function get_hostname() {
+	get_hostname: function () {
 		var hostname = lightdm.hostname;
 		var hostname_span = document.getElementById('hostname');
 		$(hostname_span).append(hostname);
-	}
+	},
 
-	/**
-	 * Actions management.
-	 *
-	 *
-	 */
 
-	function update_time() {
-		var time = document.getElementById("current_time");
-		var date = new Date();
-		var twelveHr = [
-			'sq-al',
-			'zh-cn',
-			'zh-tw',
-			'en-au',
-			'en-bz',
-			'en-ca',
-			'en-cb',
-			'en-jm',
-			'en-ng',
-			'en-nz',
-			'en-ph',
-			'en-us',
-			'en-tt',
-			'en-zw',
-			'es-us',
-			'es-mx'];
-		var userLang = window.navigator.language;
-		var is_twelveHr = twelveHr.indexOf(userLang);
-		var hh = date.getHours();
-		var mm = date.getMinutes();
-		var suffix = "AM";
+	update_time: function (lang) {
+		var $time = $("#current_time"),
+			date = new Date(),
+			twelveHr = [
+				'sq-al',
+				'zh-cn',
+				'zh-tw',
+				'en-au',
+				'en-bz',
+				'en-ca',
+				'en-cb',
+				'en-jm',
+				'en-ng',
+				'en-nz',
+				'en-ph',
+				'en-us',
+				'en-tt',
+				'en-zw',
+				'es-us',
+				'es-mx'],
+			is_twelveHr = twelveHr.indexOf(lang),
+			hh = date.getHours(),
+			mm = date.getMinutes(),
+			suffix = "AM";
 		if (hh >= 12) {
 			suffix = "PM";
 			if (is_twelveHr !== -1 && is_twelveHr !== 12) {
@@ -163,17 +145,18 @@ $(document).ready(function () {
 		if (hh === 0 && is_twelveHr !== -1) {
 			hh = 12;
 		}
-		time.innerHTML = hh + ":" + mm + " " + suffix;
-	}
+		$time.text(hh + ":" + mm + " " + suffix);
+	},
 
-	function initialize_timer() {
-		var userLang = window.navigator.language;
-		log(userLang);
-		update_time();
-		setInterval(update_time, 60000);
-	}
+	initialize_timer: function () {
+		var _self = this,
+			lang = lightdm.get_default_language();
+		log(lang);
+		_self.update_time(lang);
+		setInterval(_self.update_time.bind(lang), 60000);
+	},
 
-	function checkKey(event) {
+	checkKey: function (event) {
 		var action;
 		switch (event.which) {
 			case 13:
@@ -191,9 +174,9 @@ $(document).ready(function () {
 			default:
 				break;
 		}
-	}
+	},
 
-	function addActionLink(id) {
+	addActionLink: function (id) {
 		if (eval("lightdm.can_" + id)) {
 			var label = id.substr(0, 1).toUpperCase() + id.substr(1, id.length - 1);
 			var id2;
@@ -211,18 +194,18 @@ $(document).ready(function () {
 			}
 			$("#actionsArea").append('\n<button type="button" class="btn btn-default ' + id + '" data-toggle="tooltip" data-placement="top" title="' + label + '" data-container="body" onclick="handleAction(\'' + id + '\')"><i class="fa fa-' + id2 + '"></i></button>');
 		}
-	}
+	},
 
-	function capitalize(string) {
+	capitalize: function (string) {
 		return string.charAt(0).toUpperCase() + string.slice(1);
-	}
+	},
 
-	window.handleAction = function (id) {
+	handleAction: function (id) {
 		log("handleAction(" + id + ")");
 		eval("lightdm." + id + "()");
-	};
+	},
 
-	function getUserObj(username) {
+	getUserObj: function (username) {
 		var user = null;
 		for (var i = 0; i < lightdm.users.length; ++i) {
 			if (lightdm.users[i].name == username) {
@@ -231,9 +214,9 @@ $(document).ready(function () {
 			}
 		}
 		return user;
-	}
+	},
 
-	function getSessionObj(sessionname) {
+	getSessionObj: function (sessionname) {
 		var session = null;
 		for (var i = 0; i < lightdm.sessions.length; ++i) {
 			if (lightdm.sessions[i].name == sessionname) {
@@ -242,10 +225,10 @@ $(document).ready(function () {
 			}
 		}
 		return session;
-	}
+	},
 
 
-	window.startAuthentication = function (userId) {
+	startAuthentication: function (userId) {
 		log("startAuthentication(" + userId + ")");
 
 		if (selectedUser !== null) {
@@ -256,10 +239,10 @@ $(document).ready(function () {
 		localStorage.setItem('selUser', userId);
 		selectedUser = '.' + userId;
 		$(selectedUser).addClass('hovered');
-		console.log(userList);
-		if ($(userList).children().length > 3) {
-			$(userList).css('column-count', 'initial');
-			$(userList).parent().css('max-width', '50%');
+		console.log(user_list);
+		if ($(user_list).children().length > 3) {
+			$(user_list).css('column-count', 'initial');
+			$(user_list).parent().css('max-width', '50%');
 		}
 		$(selectedUser).siblings().hide();
 		$('.fa-toggle-down').hide();
@@ -279,9 +262,9 @@ $(document).ready(function () {
 		authPending = true;
 
 		lightdm.start_authentication(userId);
-	};
+	},
 
-	window.cancelAuthentication = function () {
+	cancelAuthentication: function () {
 		log("cancelAuthentication()");
 		$('#statusArea').hide();
 		$('#timerArea').hide();
@@ -289,44 +272,45 @@ $(document).ready(function () {
 		$('#session-list').hide();
 		lightdm.cancel_authentication();
 		log("authentication cancelled for " + selectedUser);
-		if ($(userList).children().length > 3) {
-			$(userList).css('column-count', '2');
-			$(userList).parent().css('max-width', '85%');
+		if ($(user_list).children().length > 3) {
+			$(user_list).css('column-count', '2');
+			$(user_list).parent().css('max-width', '85%');
 		}
 		$('.list-group-item').removeClass('hovered').siblings().show();
 		$('.fa-toggle-down').show();
 		selectedUser = null;
 		authPending = false;
 		return true;
-	};
+	},
 
-	window.submitPassword = function () {
+	submitPassword: function () {
 		log("provideSecret()");
 		lightdm.provide_secret($('#passwordField').val());
 		$('#passwordArea').hide();
 		$('#timerArea').show();
 		log("done");
-	};
+	},
 
-	/**
-	 * Image loading management.
-	 */
-
-	window.imgNotFound = function (source) {
+	imgNotFound: function (source) {
 		source.src = 'img/antergos-logo-user.jpg';
 		source.onerror = "";
 		return true;
-	};
+	},
 
-	window.sessionToggle = function (el) {
+	sessionToggle: function (el) {
 		var selText = $(el).text();
 		var theID = $(el).attr('id');
 		var selUser = localStorage.getItem('selUser');
 		$(el).parents('.btn-group').find('.selected').attr('id', theID);
 		$(el).parents('.btn-group').find('.selected').html(selText);
 		localStorage.setItem(selUser, theID)
-	};
-});
+	},
+
+	partial: {
+		user: '<li><a href="#"><img src="" alt=""><div class="ant-user-info"><h2></h2></div></a></li>'
+
+	}
+};
 
 /**
  * Lightdm Callbacks
@@ -365,3 +349,12 @@ function show_message(text) {
 function show_error(text) {
 	show_message(text);
 }
+/*
+ $(document).keydown(function (e) {
+ checkKey(e);
+ });
+ // Action buttons
+ addActionLink("shutdown");
+ addActionLink("hibernate");
+ addActionLink("suspend");
+ addActionLink("restart");*/

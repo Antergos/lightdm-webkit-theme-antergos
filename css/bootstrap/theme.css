@@ -257,6 +257,7 @@ a {
 	border-color: transparent !important;
 }
 
+
 .time-panel:target {
 	-webkit-animation: flip 0.5s ease-out;
 }

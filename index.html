@@ -37,19 +37,19 @@
 
 	<!--For testing changes made to theme in any web browser-->
 	<script type="text/javascript" src="js/mock.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/material.prefixed.min.css"/>
 
-	<!-- Bootstrap Core CSS -->
-	<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.min.css"/>
-	<link rel="stylesheet" type="text/css" href="css/bootstrap/prettify.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css"/>
 
 	<!-- Custom CSS here -->
-	<link rel="stylesheet" type="text/css" href="css/bootstrap/theme.css">
 	<link rel="stylesheet" type="text/css" href="font-awesome/css/font-awesome.min.css"/>
 
 	<!-- The order in which each script appears in document is VERY IMPORTANT -->
 	<script src="js/jquery-2.1.4.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
+	<script src="js/jquery.mobile.custom.min.js"></script>
+	<script src="js/material.min.js"></script>
 	<script type="text/javascript" src="js/greeter.js"></script>
+	<script type="text/javascript" src="js/bridge.js"></script>
 
 	<script type="text/javascript">
 		function randomBG() {
@@ -62,8 +62,8 @@
 				}
 			});
 			var randBG = arrayBackground[Math.floor(Math.random() * arrayBackground.length)];
-			$('.header').fadeTo('slow', 0.3, function () {
-				$(".header").css("background", "url('/usr/share/antergos/wallpapers/" + randBG + "')");
+			$('.ant-intro-block').fadeTo('slow', 0.3, function () {
+				$(".ant-intro-block").css("background", "url('img/wallpapers/" + randBG + "')");
 			}).fadeTo('slow', 1);
 		}
 
@@ -83,30 +83,30 @@
 				} else {
 					console.log("Turn off random");
 					localStorage.setItem("bgrandom", '0');
-					$('.header').fadeTo('slow', 0.3, function () {
-						$(".header").css("background", "url('/usr/share/antergos/wallpapers/" + bg + "')");
+					$('.ant-intro-block').fadeTo('slow', 0.3, function () {
+						$(".ant-intro-block").css("background", "url('img/wallpapers/" + bg + "')");
 					}).fadeTo('slow', 1);
-					var bgurl = "url('/usr/share/antergos/wallpapers/" + bg + "')";
+					var bgurl = "url('img/wallpapers/" + bg + "')";
 					localStorage.setItem("bgsaved", bgurl)
 				}
 			});
 
 		});
 
-		$(document).ready(function () {
-			if ((localStorage.getItem("bgsaved") !== null) && (localStorage.getItem("bgrandom") == '0')) {
-				$('.header').fadeTo('slow', 0.3, function () {
-					$(".header").css("background", localStorage.getItem('bgsaved'));
-				}).fadeTo('slow', 1);
-			}
-			if (localStorage.getItem("bgrandom") !== '0') {
-				console.log("Is random");
-				randomBG();
-			}
-			if (localStorage.getItem("bgrandom") == null) {
-				localStorage.setItem("bgrandom", "1");
-			}
-		});
+		 $(document).ready(function () {
+		 if ((localStorage.getItem("bgsaved") !== null) && (localStorage.getItem("bgrandom") == '0')) {
+		 $('.ant-intro-block').fadeTo('slow', 0.3, function () {
+		 $(".ant-intro-block").css("background", localStorage.getItem('bgsaved'));
+		 }).fadeTo('slow', 1);
+		 }
+		 if (localStorage.getItem("bgrandom") !== '0') {
+		 console.log("Is random");
+		 randomBG();
+		 }
+		 if (localStorage.getItem("bgrandom") == null) {
+		 localStorage.setItem("bgrandom", "1");
+		 }
+		 });
 
 		function showAlert() {
 			$("#login").addClass("in");
@@ -187,135 +187,57 @@
 </div>
 <!-- /BG Switcher Sidebar -->
 
-<!-- Full Page Image Header Area -->
-<div id="top" class="header">
-	<div class="login-wrapper">
-		<div class="login-cell">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-6 col-md-offset-3">
-						<!-- Login Dialog -->
-						<div id="login" class="panel panel-default login-box fade">
-							<div class="panel-heading text-center">
-                                    <span class="pull-left">
-                                        <img src="img/antergos.png" alt="Antergos"/>
-                                    </span> <span class="welcome">Welcome!</span>
-								<span id="hostname" class="pull-right"></span>
-							</div>
-							<div id="panelfix" class="panel-body">
-								<div class="panel-group" id="accordion">
-									<div class="panel panel-default panel-shadow time-panel">
+<div class="ant-intro-block">
+	<div class="content-wrapper">
+		<!-- Clock Widget -->
+		<h1 id="current_time" class="time text-center"></h1>
+		<a href="#" data-action="show-users"><i class="material-icons">&#xE039;</i></a>
+	</div>
+</div> <!-- /.intro-block -->
 
-										<div id="collapseOne" class="panel-collapse collapse in">
-											<div id="timewrap" class="panel-body panel-shadow time-panel text-center">
-												<a id="trigger" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
-													<!-- Clock Widget -->
-													<span id="current_time" class="time text-center"></span>
-													<i class="fa fa-toggle-up"></i> </a>
+<div class="ant-users-wrapper">
+	<ul class="ant-slider">
 
-											</div>
+	</ul>
 
-										</div>
+	<ul class="ant-slider-navigation ant-img-replace">
+		<li><a href="#" class="prev inactive">Prev</a></li>
+		<li><a href="#" class="next">Next</a></li>
+	</ul> <!-- /.slider-navigation -->
+</div> <!-- /.users-wrapper -->
 
-									</div>
-									<div class="panel panel-default panel-shadow panel-flow">
-										<!-- User Selection Widget -->
-										<div id="collapseTwo" class="panel-collapse collapse">
-											<div id="list-group" class="panel-body panel-wrap">
+<div class="ant-user-login">
+	<div>
+		<h2></h2>
+		<em></em>
 
-												<div class="user-wrap2">
+		<div class="card card--medium">
+			<h2 class="card__title"></h2><span class="card__subtitle"></span>
 
-													<div id="user-list2" class="list-group"></div>
-													<a id="user-target2" class="user-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onclick="cancelAuthentication()">
-														<i class="fa fa-toggle-down" style="position:absolute;"></i>
-													</a>
+			<div class="card__text form__wrapper wow fadeInDown animated" data-wow-delay="0.6s" style="visibility: visible; animation-delay: 0.6s;">
+				<input type="password" class="form__input" id="password" name="password" autocomplete="off" style="cursor: auto;">
+				<label class="form__label" for="password"> <span class="form__label-content">Password</span> </label>
 
-												</div>
-												<!-- Password Input -->
-												<div id="passwordArea" class="password">
-													<table border="0" align="center">
-														<tr>
-															<td>
-																<div class="input-group">
-																	<input id="passwordField" type="password" class="password form-control"/>
-
-																	<div class="input-group-btn">
-																		<div class="btn-group">
-																			<button class="btn btn-primary" type="button" onclick="submitPassword()">
-																				<i class="fa fa-sign-in"></i>
-																			</button>
-																			<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-																				<i class="fa fa-caret-down"></i>
-																			</button>
-																			<ul class="dropdown-menu pull-right">
-																				<li>
-																					<a href="#" onclick="cancelAuthentication()">
-																						<i class="fa fa-times"></i> Cancel</a>
-																				</li>
-																				<li>
-																					<a href="#" onclick="showLog()">
-																						<i class="fa fa-bug"></i> View Log</a>
-																				</li>
-																				<li>
-																					<a href="#" onclick="$(document.location.reload(true))">
-																						<i class="fa fa-refresh"></i> Reset</a>
-																				</li>
-																			</ul>
-																		</div>
-																	</div>
-																</div>
-															</td>
-
-														</tr>
-													</table>
-													<div id="timerArea" class="timer">
-														<i class="fa fa-spinner fa-spin"></i>
-													</div>
-												</div>
-												<!-- Status Area -->
-												<div id="statusArea" class="status">
-													<table border="0" align="center">
-														<tr>
-															<td>
-																<div class="alert alert-danger  fade in">
-																	<button type="button" class="close" onclick="cancelAuthentication()" data-dismiss="alert" aria-hidden="true">&nbsp;&times;</button>
-                                                                        <span id="showMsg">
-                                                                            <strong>Uh Oh!!</strong>Authentication failed. Please try again.
-                                                                        </span>
-																</div>
-															</td>
-														</tr>
-													</table>
-												</div>
-
-											</div>
-										</div>
-									</div>
-
-								</div>
-							</div>
-
-							<div class="panel-footer">
-								<div id="session-list" class="btn-group pull-left hidden">
-									<button type="button" class="btn btn-default selected"></button>
-									<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-										<i class="fa fa-caret-down"></i></button>
-									<ul id="sessions" class="dropdown-menu"></ul>
-								</div>
-								<div id="actionsArea" class="btn-group pull-right"></div>
-
-							</div>
-
-						</div>
-					</div>
-
+			</div>
+			<div class="card__action-bar">
+				<div class="dots">
+					<button id="password_submit" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored mdl-button--accent">
+						<i class="material-icons">arrow_forward</i>
+					</button>
+					<button id="menu-speed" class="mdl-button mdl-js-button mdl-button--icon">
+						<i class="material-icons">wsk-icon--desktop-windows</i>
+					</button>
+					<ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect" for="menu-speed">
+						<li class="mdl-menu__item">Fast</li>
+						<li class="mdl-menu__item">Medium</li>
+						<li class="mdl-menu__item">Slow</li>
+					</ul>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
-
-<div id="logArea" class="log"></div>
+	<a href="#" class="close ant-img-replace">Close</a>
+</div> <!-- ./user-content -->
 
 <!-- Custom JavaScript for the BG Switcher & Clock Toggle -->
 <script>
@@ -330,23 +252,6 @@
 		$("#bg-switch-wrapper").toggleClass("active");
 		$(this).hide();
 		$("#bg-switch-close").show();
-	});
-
-
-	$('*').each(function () {
-		$(this).attr('tabindex', -1);
-	});
-
-	$('#collapseTwo').on('shown.bs.collapse', function () {
-		$('#collapseTwo a').each(function (index) {
-			var i = index + 1;
-			$(this).attr('tabindex', i);
-		});
-	});
-	$('#collapseTwo').on('hidden.bs.collapse', function () {
-		$('#collapseTwo a').each(function (index) {
-			$(this).attr('tabindex', -1);
-		});
 	});
 
 </script>

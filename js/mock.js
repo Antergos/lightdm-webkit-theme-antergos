@@ -4,7 +4,7 @@ if (typeof lightdm == 'undefined') {
 	lightdm.hostname="test-host";
 	lightdm.languages= [{code: "en_US", name: "English(US)", territory: "USA"}, {code: "en_UK", name: "English(UK)", territory: "UK"}];
 	lightdm.default_language= lightdm.languages[0];
-	lightdm.layouts= [{name: "test", short_description: "test description", short_description:"really long epic description"}];
+	lightdm.layouts= [{name: "test", short_description: "test description", long_description:"really long epic description"}];
 	lightdm.default_layout= lightdm.layouts[0];
 	lightdm.layout= lightdm.layouts[0];
 	lightdm.sessions=[{key: "gnome", name: "gnome", comment: "no comment"}, {key: "cinnamon", name: "cinnamon", comment: "no comment"},{key: "openbox", name: "openbox", comment: "no comment"}, {key: "key4", name: "kde", comment: "no comment"}];
@@ -33,6 +33,7 @@ if (typeof lightdm == 'undefined') {
 	lightdm.get_string_property= function() {};
 	lightdm.get_integer_property= function() {};
 	lightdm.get_boolean_property= function() {};
+	lightdm.get_default_language= function() {return 'en-us'};
 	lightdm.cancel_timed_login= function() {
 		_lightdm_mock_check_argument_length(arguments, 0);
 		lightdm._timed_login_cancelled= true;
