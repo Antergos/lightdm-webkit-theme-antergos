@@ -52,7 +52,7 @@ window.greeter = {
 	initialize_user_list: function () {
 		var _self = this,
 			$user_list = $('.ant-slider'),
-				first = true;
+			first = true;
 		for (var i in lightdm.users) {
 			var user = lightdm.users[i],
 				last_session = localStorage.getItem(user.name + ':session'),
@@ -129,6 +129,7 @@ window.greeter = {
 				'en-zw',
 				'es-us',
 				'es-mx'],
+			lang_code = lang.code,
 			is_twelveHr = twelveHr.indexOf(lang),
 			hh = date.getHours(),
 			mm = date.getMinutes(),
@@ -150,7 +151,7 @@ window.greeter = {
 
 	initialize_timer: function () {
 		var _self = this,
-			lang = lightdm.get_default_language();
+			lang = lightdm.default_language;
 		log(lang);
 		_self.update_time(lang);
 		setInterval(_self.update_time.bind(lang), 60000);

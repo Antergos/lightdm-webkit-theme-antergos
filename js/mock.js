@@ -33,7 +33,6 @@ if (typeof lightdm == 'undefined') {
 	lightdm.get_string_property= function() {};
 	lightdm.get_integer_property= function() {};
 	lightdm.get_boolean_property= function() {};
-	lightdm.get_default_language= function() {return 'en-us'};
 	lightdm.cancel_timed_login= function() {
 		_lightdm_mock_check_argument_length(arguments, 0);
 		lightdm._timed_login_cancelled= true;
