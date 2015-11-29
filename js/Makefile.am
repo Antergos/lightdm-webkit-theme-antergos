@@ -3,7 +3,8 @@ javascript_DATA = \
 	bootstrap.min.js \
 	greeter.js \
 	jquery-2.1.4.min.js \
-	mock.js
+	mock.js \
+	moment-with-locales.min.js
 
 EXTRA_DIST = $(javascript_DATA)
 
