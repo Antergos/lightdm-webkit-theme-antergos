@@ -135,42 +135,8 @@ $(document).ready(function() {
 
 	function update_time() {
 		var time = document.getElementById("current_time");
-		var date = new Date();
-		var twelveHr = [
-			'sq-al',
-			'zh-cn',
-			'zh-tw',
-			'en-au',
-			'en-bz',
-			'en-ca',
-			'en-cb',
-			'en-jm',
-			'en-ng',
-			'en-nz',
-			'en-ph',
-			'en-us',
-			'en-tt',
-			'en-zw',
-			'es-us',
-			'es-mx'];
 		var userLang = window.navigator.language;
-		var is_twelveHr = twelveHr.indexOf(userLang);
-		var hh = date.getHours();
-		var mm = date.getMinutes();
-		var suffix = "AM";
-		if (hh >= 12) {
-			suffix = "PM";
-			if (is_twelveHr !== -1 && is_twelveHr !== 12) {
-				hh = hh - 12;
-			}
-		}
-		if (mm < 10) {
-			mm = "0" + mm;
-		}
-		if (hh === 0 && is_twelveHr !== -1) {
-			hh = 12;
-		}
-		time.innerHTML = hh + ":" + mm + " " + suffix;
+		time.innerHTML = moment().locale(userLang).format("LT");
 	}
 
 	function initialize_timer() {
