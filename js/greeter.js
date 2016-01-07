@@ -229,6 +229,8 @@ class AntergosTheme {
 
 			if ( lightdm[ cmd ] ) {
 				$( template ).appendTo( $( this.$actions_container ) ).click( action, ( event ) => {
+					// prevent accidential hibernates after resume 
+					$('#passwordField').focus();
 					lightdm[ event.data ]();
 				} );
 			}
