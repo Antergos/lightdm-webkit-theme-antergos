@@ -1,14 +1,14 @@
 {
-    "auth_failed": "Uh Oh! Ошибка аутентификации. Пожалуйста, попробуйте еще раз.",
-    "background_options": "Фоновые Опции",
+    "auth_failed": "Ошибка аутентификации. Пожалуйста, попробуйте еще раз.",
+    "background_options": "Настройки фона",
     "cancel": "Отмена",
-    "confirm_system_action": "Ты уверен?",
+    "confirm_system_action": "Вы уверены?",
     "debug_log": "Журнал отладки",
-    "greeting": "Добро пожаловат!",
-    "hibernate": "зимовать",
-    "random": "случайный",
-    "reset": "Сброс",
+    "greeting": "Добро пожаловать!",
+    "hibernate": "Спящий режим",
+    "random": "Случайный",
+    "reset": "Перезагрузка",
     "restart": "Перезапуск",
-    "shutdown": "Неисправность",
-    "suspend": "приостановить"
+    "shutdown": "Выключение",
+    "suspend": "Ждущий режим"
 }
