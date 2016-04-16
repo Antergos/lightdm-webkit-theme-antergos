@@ -65,12 +65,42 @@ class AntergosThemeUtils {
 		this.translations = window.ant_translations;
 		this.$log_container = $('#logArea');
 		this.recursion = 0;
+		this.cache_backend = '';
 
 		if ( 'undefined' === typeof window.navigator.languages ) {
 			window.navigator.languages = [ window.navigator.language ];
 		}
 
+		this.setup_cache_backend();
 		this.init_config_values();
+
+		return _util;
+	}
+
+
+	setup_cache_backend() {
+		// Do we have access to localStorage?
+		try {
+			localStorage.setItem('testing', 'test');
+			let test = localStorage.getItem('testing');
+
+			if ('test' === test) {
+				// We have access to localStorage
+				this.cache_backend = 'localStorage';
+			}
+			localStorage.removeItem('testing');
+
+		} catch(err) {
+			// We do not have access to localStorage. Fallback to cookies.
+			this.log(err);
+			this.log('INFO: localStorage is not available. Using cookies for cache backend.');
+			this.cache_backend = 'Cookies';
+		}
+
+		// Just in case...
+		if ('' === this.cache_backend) {
+			this.cache_backend = 'Cookies';
+		}
 	}
 
 
@@ -94,7 +124,7 @@ class AntergosThemeUtils {
 	 * @param {...string} key_parts - Strings that are combined to form the key.
 	 */
 	cache_get() {
-		var key = `ant`;
+		var key = `ant`, value;
 
 		for (var _len = arguments.length, key_parts = new Array(_len), _key = 0; _key < _len; _key++) {
 			key_parts[_key] = arguments[_key];
@@ -103,7 +133,18 @@ class AntergosThemeUtils {
 		for ( var part of key_parts ) {
 			key += `:${part}`;
 		}
-		return localStorage.getItem( key );
+
+		this.log(`cache_get() called with key: ${key}`);
+
+		if ('localStorage' === this.cache_backend) {
+			value = localStorage.getItem(key);
+		} else if ('Cookies' === this.cache_backend) {
+			value = Cookies.get(key);
+		} else {
+			value = null;
+		}
+
+		return ('undefined' !== typeof(value)) ? value : null;
 	}
 
 
@@ -115,7 +156,7 @@ class AntergosThemeUtils {
 	 * @param {...string} key_parts - Strings that are combined to form the key.
 	 */
 	cache_set( value ) {
-		var key = `ant`;
+		var key = `ant`, res;
 
 		for (var _len2 = arguments.length, key_parts = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
 			key_parts[_key2 - 1] = arguments[_key2];
@@ -124,7 +165,17 @@ class AntergosThemeUtils {
 		for ( var part of key_parts ) {
 			key += `:${part}`;
 		}
-		return localStorage.setItem( key, value );
+		this.log(`cache_set() called with key: ${key} and value: ${value}`);
+
+		if ('localStorage' === this.cache_backend) {
+			res = localStorage.setItem( key, value );
+		} else if ('Cookies' === this.cache_backend) {
+			res = Cookies.set(key, value);
+		} else {
+			res = null;
+		}
+
+		return res;
 	}
 
 
@@ -132,17 +183,15 @@ class AntergosThemeUtils {
 	 * Get some values from `lightdm-webkit2-greeter.conf` and save them for later.
 	 */
 	init_config_values() {
-		var logo = '', user_image = '', background_images = [], background_images_dir = '';
+		var logo, user_image, debug, background_images, background_images_dir;
 
 		if ( 'undefined' !== typeof( config ) ) {
 
-			logo = config.get_str( 'branding', 'logo' ) || '';
-			user_image = config.get_str( 'branding', 'user_image' ) || '';
-			this.debug = config.get_bool( 'greeter', 'debug_mode' );
-			this.debug = (true === this.debug) ? this.debug : false;
+			logo = config.get_str( 'branding', 'logo' ) || 'img/antergos.png';
+			user_image = config.get_str( 'branding', 'user_image' ) || 'img/antergos-logo-user.png';
+			background_images_dir = config.get_str( 'branding', 'background_images' ) || '/usr/share/backgrounds';
+			debug = config.get_bool( 'greeter', 'debug_mode' ) || false;
 
-
-			background_images_dir = config.get_str( 'branding', 'background_images' ) || '';
 			if ( background_images_dir ) {
 				background_images = greeterutil.dirlist( background_images_dir ) || [];
 				_util.log(background_images);
@@ -155,6 +204,7 @@ class AntergosThemeUtils {
 		}
 
 		this.logo = logo;
+		this.debug = debug;
 		this.user_image = user_image;
 		this.background_images = background_images;
 		this.background_images_dir = background_images_dir;
@@ -207,7 +257,7 @@ class AntergosBackgroundManager {
 
 		this.current_background = _util.cache_get( 'background_manager', 'current_background' );
 
-		if ( ! _util.background_images_dir || ! _util.background_images ) {
+		if ( ! _util.background_images_dir || ! _util.background_images || ! _util.background_images.length ) {
 			_util.log( 'AntergosBackgroundManager: [ERROR] No background images detected.' );
 
 			$( '.header' ).fadeTo( 300, 0.5, function() {
@@ -224,7 +274,7 @@ class AntergosBackgroundManager {
 	 * Determine which background image should be displayed and apply it.
 	 */
 	initialize() {
-		if ( ! this.current_background ) {
+		if ( ! this.current_background && 'localStorage' === _util.cache_backend ) {
 			// For backwards compatibility
 			if ( null !== localStorage.getItem( 'bgsaved' ) && '0' === localStorage.getItem( 'bgrandom' ) ) {
 				this.current_background = localStorage.getItem( 'bgsaved' );
@@ -392,15 +442,25 @@ class AntergosTheme {
 	 * Initialize the theme.
 	 */
 	initialize() {
+		_util.log('initialize() starting.');
 		this.prepare_translations();
+		_util.log('initialize() 1.');
 		this.do_static_translations();
+		_util.log('initialize() 2.');
 		this.initialize_clock();
+		_util.log('initialize() 3.');
 		this.prepare_login_panel_header();
+		_util.log('initialize() 4.');
 		this.prepare_user_list();
+		_util.log('initialize() 5.');
 		this.prepare_session_list();
+		_util.log('initialize() 6.');
 		this.prepare_system_action_buttons();
+		_util.log('initialize() 7.');
 		this.register_callbacks();
+		_util.log('initialize() 8.');
 		this.background_manager.setup_background_thumbnails();
+		_util.log('initialize() finished.');
 	}
 
 
@@ -438,7 +498,9 @@ class AntergosTheme {
 
 			if ( null === last_session ) {
 				// For backwards compatibility
-				last_session = localStorage.getItem( user.name );
+				if ('localStorage' === _util.cache_backend) {
+					last_session = localStorage.getItem( user.name );
+				}
 				if ( null === last_session ) {
 					// This user has never logged in before let's enable the system's default
 					// session.
@@ -546,7 +608,7 @@ class AntergosTheme {
 		if ( $( this.$clock_container ).hasClass( 'in' ) ) {
 			$( '#trigger' ).trigger( 'click' );
 		}
-		if ( $( this.$user_list ).length <= 1 ) {
+		if ( $( this.$user_list ).children().length <= 1 ) {
 			$( this.$user_list ).find( 'a' ).trigger( 'click', this );
 		}
 	}
@@ -604,7 +666,8 @@ class AntergosTheme {
 	start_authentication( event ) {
 		var user_id = $( this ).attr( 'id' ),
 			selector = `.${user_id}`,
-			user_session = _util.cache_get( 'user', user_id, 'session' );
+			user_session_cached = _util.cache_get( 'user', user_id, 'session' ),
+			user_session = (null !== user_session_cached) ? user_session_cached : lightdm.default_session;
 
 		if ( _self.auth_pending || null !== _self.selected_user ) {
 			lightdm.cancel_authentication();
