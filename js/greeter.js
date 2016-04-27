@@ -60,12 +60,15 @@ class AntergosThemeUtils {
 		}
 		_util = this;
 
+		this.initialize_theme_heartbeat();
+
 		this.debug = false;
 		this.lang = window.navigator.language.split( '-' )[ 0 ].toLowerCase();
 		this.translations = window.ant_translations;
 		this.$log_container = $('#logArea');
 		this.recursion = 0;
 		this.cache_backend = '';
+		this.heartbeat = '';
 
 		if ( 'undefined' === typeof window.navigator.languages ) {
 			window.navigator.languages = [ window.navigator.language ];
@@ -75,6 +78,39 @@ class AntergosThemeUtils {
 		this.init_config_values();
 
 		return _util;
+	}
+
+
+	/**
+	 * Initialize greeter theme heartbeat. Themes start the heartbeat by sending a post message
+	 * via JavaScript. Once started, the heartbeat will schedule a check to ensure that the
+	 * theme has sent a subsequent heartbeat message. Once started, if a heartbeat message was not
+	 * received by the time greeter's check runs it will assume that there has been an error
+	 * in the web process and fallback to the simple theme.
+	 */
+	initialize_theme_heartbeat() {
+		var heartbeats = 0;
+
+		this.log('Initializing theme heartbeat.');
+		this.heartbeat = setInterval(() => {
+			++heartbeats;
+			window.webkit.messageHandlers.GreeterBridge.postMessage('Heartbeat');
+			if (heartbeats < 20) {
+				console.log('Sending heartbeat...');
+			}
+		}, 5000);
+	}
+
+
+	/**
+	 * Exits the heartbeat.
+	 *
+	 * Before starting the user's session, themes should exit the heartbeat
+	 * to prevent a race condition when the greeter is shutting down.
+	 */
+	stop_theme_heartbeat() {
+		window.webkit.messageHandlers.GreeterBridge.postMessage('Heartbeat::Exit');
+		clearInterval(this.heartbeat);
 	}
 
 
@@ -101,6 +137,7 @@ class AntergosThemeUtils {
 		if ('' === this.cache_backend) {
 			this.cache_backend = 'Cookies';
 		}
+		console.log(`this.cache_backend is: ${this.cache_backend}`);
 	}
 
 
@@ -142,6 +179,10 @@ class AntergosThemeUtils {
 			value = Cookies.get(key);
 		} else {
 			value = null;
+		}
+
+		if (null !== value) {
+			this.log(`cache_get() key: ${key} value is: ${value}`);
 		}
 
 		return ('undefined' !== typeof(value)) ? value : null;
@@ -242,7 +283,6 @@ class AntergosThemeUtils {
 
 
 
-
 /**
  * This class handles the theme's background switcher.
  */
@@ -313,7 +353,9 @@ class AntergosBackgroundManager {
 	 */
 	do_background() {
 		$( '.header' ).fadeTo( 300, 0.5, function() {
-			var tpl = `url(${_bg_self.current_background})`;
+			var bg = _bg_self.current_background,
+				tpl = (bg.indexOf('url(') > -1) ? bg : `url(${_bg_self.current_background})`;
+
 			$( '.header' ).css( "background-image", tpl );
 		} ).fadeTo( 300, 1 );
 	}
@@ -442,25 +484,15 @@ class AntergosTheme {
 	 * Initialize the theme.
 	 */
 	initialize() {
-		_util.log('initialize() starting.');
 		this.prepare_translations();
-		_util.log('initialize() 1.');
 		this.do_static_translations();
-		_util.log('initialize() 2.');
 		this.initialize_clock();
-		_util.log('initialize() 3.');
 		this.prepare_login_panel_header();
-		_util.log('initialize() 4.');
 		this.prepare_user_list();
-		_util.log('initialize() 5.');
 		this.prepare_session_list();
-		_util.log('initialize() 6.');
 		this.prepare_system_action_buttons();
-		_util.log('initialize() 7.');
 		this.register_callbacks();
-		_util.log('initialize() 8.');
 		this.background_manager.setup_background_thumbnails();
-		_util.log('initialize() finished.');
 	}
 
 
@@ -745,6 +777,9 @@ class AntergosTheme {
 
 		if ( lightdm.is_authenticated ) {
 			// The user entered the correct password. Let's log them in.
+			// But first, we need to exit the theme heartbeat to prevent a race condition.
+			_util.stop_theme_heartbeat();
+
 			$( 'body' ).fadeOut( 1000, () => {
 				lightdm.login( lightdm.authentication_user, selected_session );
 			} );
@@ -799,6 +834,8 @@ class AntergosTheme {
 
 		$modal.find( '.btn-primary' ).text( _util.translations[ action ] ).click( action, ( event ) => {
 			$( this ).off( 'click' );
+			// Stop theme heartbeat to prevent race condition.
+			_util.stop_theme_heartbeat();
 			lightdm[ event.data ]();
 		} );
 		$modal.find( '.btn-default' ).click( () => {
@@ -859,6 +896,9 @@ class AntergosTheme {
 }
 
 
+
+
+
 /**
  * Initialize the theme once the window has loaded.
  */
@@ -866,4 +906,3 @@ $( window ).load( () => {
 	new AntergosThemeUtils();
 	new AntergosTheme();
 } );
-
