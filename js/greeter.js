@@ -46,7 +46,6 @@ String.prototype.capitalize = function() {
 
 
 
-
 /**
  * This should be the base class for all the theme's components. However, webkit's
  * support of extending (subclassing) ES6 classes is not stable enough to use.
@@ -84,9 +83,9 @@ class AntergosThemeUtils {
 	/**
 	 * Initialize greeter theme heartbeat. Themes start the heartbeat by sending a post message
 	 * via JavaScript. Once started, the heartbeat will schedule a check to ensure that the
-	 * theme has sent a subsequent heartbeat message. Once started, if a heartbeat message was not
-	 * received by the time greeter's check runs it will assume that there has been an error
-	 * in the web process and fallback to the simple theme.
+	 * theme has sent a subsequent heartbeat message. Once started, if a heartbeat message is not
+	 * received by the time any of the greeter's subsequent checks run it will assume that there
+	 * has been an error in the web process and fallback to the simple theme.
 	 */
 	initialize_theme_heartbeat() {
 		var heartbeats = 0;
@@ -95,7 +94,7 @@ class AntergosThemeUtils {
 		this.heartbeat = setInterval(() => {
 			++heartbeats;
 			window.webkit.messageHandlers.GreeterBridge.postMessage('Heartbeat');
-			if (heartbeats < 20) {
+			if (heartbeats < 5) {
 				console.log('Sending heartbeat...');
 			}
 		}, 5000);
@@ -137,7 +136,7 @@ class AntergosThemeUtils {
 		if ('' === this.cache_backend) {
 			this.cache_backend = 'Cookies';
 		}
-		console.log(`this.cache_backend is: ${this.cache_backend}`);
+		console.log(`AntergosThemeUtils.cache_backend is: ${this.cache_backend}`);
 	}
 
 
@@ -894,8 +893,6 @@ class AntergosTheme {
 		}
 	}
 }
-
-
 
 
 
