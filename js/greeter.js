@@ -59,7 +59,6 @@ class AntergosThemeUtils {
 		_util = this;
 
 		this.debug = false;
-		this.lang = window.navigator.language.split( '-' )[ 0 ].toLowerCase();
 		this.translations = window.ant_translations;
 		this.$log_container = $('#logArea');
 		this.recursion = 0;
@@ -424,6 +423,7 @@ class AntergosTheme {
 		}
 		_self = this;
 
+		this.lang = window.navigator.language.split( '-' )[ 0 ].toLowerCase();
 		this.tux = 'img/antergos-logo-user.png';
 		this.user_list_visible = false;
 		this.auth_pending = false;
