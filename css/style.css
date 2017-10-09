@@ -27,6 +27,10 @@
  */
 
 /* Global Styles */
+@media screen and (max-width: 3840px) and (min-width: 3200px)
+{
+    html { zoom: 200%; }
+}
 
 @font-face {
 	font-family: 'Open Sans';
